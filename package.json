@@ -11,8 +11,7 @@
     "pg": "^8.0.3"
   },
   "scripts": {
-    "fetch-dev-data": "node ./utils/fetch-dev-data.js",
-    "seed-dev": "knex seed:run"
+    "fetch-dev-data": "node ./utils/fetch-dev-data.js"
   },
   "keywords": [],
   "author": "",
