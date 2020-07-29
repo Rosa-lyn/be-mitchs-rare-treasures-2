@@ -29,7 +29,3 @@ CREATE TABLE treasures (
   shop_id INT REFERENCES shops(shop_id) NOT NULL
 );
 
-
-SELECT * FROM owners;
-SELECT * FROM shops;
-SELECT * FROM treasures;

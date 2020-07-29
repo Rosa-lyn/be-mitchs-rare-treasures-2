@@ -1,4 +1,7 @@
-const { createRefObj, formatShops } = require("../utils/formatting-functions");
+const {
+  createRefObj,
+  formatTreasures,
+} = require("../utils/formatting-functions");
 
 describe("createRefObj", () => {
   test("returns an object", () => {
@@ -89,7 +92,7 @@ describe("createRefObj", () => {
   });
 });
 
-describe.only("formatShops", () => {
+describe("formatShops", () => {
   test("returns a new empty array", () => {
     expect(Array.isArray(formatShops({}, []))).toBe(true);
     const newArr = [];
