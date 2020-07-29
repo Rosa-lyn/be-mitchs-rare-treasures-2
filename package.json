@@ -5,13 +5,17 @@
   "main": "index.js",
   "dependencies": {
     "faker": "^4.1.0",
-    "knex": "^0.21.1",
+    "knex": "^0.21.2",
     "lodash": "^4.17.15",
     "lodash.random": "^3.2.0",
-    "pg": "^8.0.3"
+    "pg": "^8.3.0"
   },
   "scripts": {
-    "fetch-dev-data": "node ./utils/fetch-dev-data.js"
+    "fetch-dev-data": "node ./utils/fetch-dev-data.js",
+    "setup-test-db": "psql -f db/test-setup.sql",
+    "setup-dev-db": "psql -f db/dev-setup.sql",
+    "seed-dev": "npm run setup-dev-db && knex seed:run",
+    "seed-test": "npm run setup-test-db && NODE_ENV=test knex seed:run"
   },
   "keywords": [],
   "author": "",
