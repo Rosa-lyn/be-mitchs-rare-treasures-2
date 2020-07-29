@@ -19,5 +19,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidjohn290/be-mitchs-rare-treasures.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidjohn290/be-mitchs-rare-treasures/issues"
+  },
+  "homepage": "https://github.com/davidjohn290/be-mitchs-rare-treasures#readme"
 }

@@ -1,0 +1,22 @@
+
+> mitchs-rare-treasures@1.0.0 setup-dev-db /Users/rosalynland/Documents/Northcoders/back-end-remote-july/be-mitchs-rare-treasures
+> psql -f db/dev-setup.sql
+
+DROP DATABASE
+CREATE DATABASE
+You are now connected to database "mitchs_rare_treasures" as user "rosalynland".
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+ owner_id | forename | surname | age 
+----------+----------+---------+-----
+(0 rows)
+
+ shop_id | shop_name | owner_id | slogan 
+---------+-----------+----------+--------
+(0 rows)
+
+ treasure_id | treasure_name | colour | age | cost_at_auction | shop_id 
+-------------+---------------+--------+-----+-----------------+---------
+(0 rows)
+
