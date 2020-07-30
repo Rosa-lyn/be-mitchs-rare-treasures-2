@@ -4,7 +4,7 @@ const handleInvalidEndpoint = (req, res, next) => {
 
 const handleInvalidQuery = (err, req, res, next) => {
   if (err.code === "42703") {
-    res.status(404).send({ msg: "Column does not exist" });
+    res.status(400).send({ msg: "Invalid sort query" });
   } else console.log(err);
 };
 

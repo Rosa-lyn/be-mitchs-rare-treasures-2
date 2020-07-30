@@ -1,6 +1,11 @@
 const knex = require("../db/connection");
 
-const fetchAllTreasure = (sort_by = "cost_at_auction", order = "asc") => {
+const fetchAllTreasure = (
+  sort_by = "cost_at_auction",
+  order = "asc",
+  colour
+) => {
+  // console.log(colour);
   return knex
     .join("shops", "shops.shop_id", "=", "treasures.shop_id")
     .select(
@@ -12,6 +17,9 @@ const fetchAllTreasure = (sort_by = "cost_at_auction", order = "asc") => {
       "shop_name"
     )
     .from("treasures")
+    .modify((query) => {
+      if (colour) query.where("colour", colour);
+    })
     .orderBy(sort_by, order);
 };
 

@@ -17,7 +17,7 @@
     "setup-dev-db": "psql -f db/dev-setup.sql",
     "seed-dev": "npm run setup-dev-db && knex seed:run",
     "seed-test": "npm run setup-test-db && NODE_ENV=test knex seed:run",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "jest": {
     "setupFilesAfterEnv": [
