@@ -98,6 +98,59 @@ describe("app", () => {
             expect(res.body.treasures.length).toBe(0);
           });
       });
+      test("POST 201: responds with an object inserted into the shops table", () => {
+        return request(app)
+          .post("/api/treasures")
+          .send({
+            treasure_name: "necklace",
+            colour: "purple",
+            age: 3000,
+            cost_at_auction: "345.23",
+            shop_id: 3,
+          })
+          .expect(201)
+          .then((res) => {
+            expect(res.body.treasure.colour).toBe("purple");
+            expect(res.body.treasure.shop_id).toBe(3);
+          });
+      });
+      test("POST 404: responds with an error when given an valid but non existent shop_id", () => {
+        return request(app)
+          .post("/api/treasures")
+          .send({
+            treasure_name: "necklace",
+            colour: "purple",
+            age: 3000,
+            cost_at_auction: "345.23",
+            shop_id: 1223,
+          })
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("Valid but non existent shop_id");
+          });
+      });
+      test("POST 400: responds with an error when passed a body with missing properties", () => {
+        return request(app)
+          .post("/api/treasures")
+          .send({})
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).toBe("Missing required properties");
+          });
+      });
+      test("PATCH 200: updates the cost_at_auction price using the specific treasure Id and responds with updated treasure", () => {
+        return request(app)
+          .patch("/api/treasures/2")
+          .send({ cost_at_auction: "200.02" })
+          .expect(200)
+          .then((res) => {
+            expect(res.body.treasure.cost_at_auction).toBe("200.02");
+            expect(res.body.treasure).toHaveProperty("colour");
+            expect(res.body.treasure).toHaveProperty("age");
+            expect(res.body.treasure).toHaveProperty("treasure_name");
+            expect(res.body.treasure).toHaveProperty("shop_id");
+          });
+      });
     });
   });
 });

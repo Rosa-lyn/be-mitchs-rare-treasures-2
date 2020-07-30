@@ -23,4 +23,24 @@ const fetchAllTreasure = (
     .orderBy(sort_by, order);
 };
 
-module.exports = { fetchAllTreasure };
+const postNewTreasure = (treasure) => {
+  return knex
+    .insert(treasure)
+    .into("treasures")
+    .returning("*")
+    .then((res) => {
+      return res[0];
+    });
+};
+
+const patchTreasureById = (treasure_id, cost_at_auction) => {
+  return knex("treasures")
+    .update("cost_at_auction", cost_at_auction)
+    .where("treasure_id", treasure_id)
+    .returning("*")
+    .then((res) => {
+      return res[0];
+    });
+};
+
+module.exports = { fetchAllTreasure, postNewTreasure, patchTreasureById };

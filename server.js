@@ -3,7 +3,7 @@ const app = express();
 const apiRouter = require("./routes/apiRouter");
 const {
   handleInvalidEndpoint,
-  handleInvalidQuery,
+  handlePSQLErrors,
 } = require("./error/errorHandling");
 
 app.use(express.json());
@@ -12,6 +12,6 @@ app.use("/api", apiRouter);
 
 app.all("/*", handleInvalidEndpoint);
 
-app.use(handleInvalidQuery);
+app.use(handlePSQLErrors);
 
 module.exports = app;
