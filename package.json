@@ -6,12 +6,10 @@
   "dependencies": {
     "express": "^4.17.1",
     "faker": "^4.1.0",
-    "jest": "^26.1.0",
     "knex": "^0.21.2",
     "lodash": "^4.17.15",
     "lodash.random": "^3.2.0",
-    "pg": "^8.3.0",
-    "supertest": "^4.0.2"
+    "pg": "^8.3.0"
   },
   "scripts": {
     "fetch-dev-data": "node ./utils/fetch-dev-data.js",
@@ -21,10 +19,19 @@
     "seed-test": "npm run setup-test-db && NODE_ENV=test knex seed:run",
     "test": "jest"
   },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-sorted"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^26.2.0",
+    "jest-sorted": "^1.0.6",
+    "supertest": "^4.0.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/davidjohn290/be-mitchs-rare-treasures.git"
