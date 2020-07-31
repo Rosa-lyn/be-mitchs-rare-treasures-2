@@ -228,17 +228,76 @@ describe("app", () => {
           .get("/api/owners?sort_by=forename")
           .expect(200)
           .then((res) => {
+            // console.log(res.body);
             expect(res.body.owners).toBeSortedBy("forename");
             expect(res.body.owners[0].forename).toBe("firstname-a");
           });
       });
-      test.only("Get 200: defaults back to owner Id when given an invalid sort by query", () => {
+      test("Get 200: defaults back to owner Id when given an invalid sort by query", () => {
         return request(app)
           .get("/api/owners?sort_by=firstname")
           .expect(200)
           .then((res) => {
             expect(res.body.owners).toBeSortedBy("owner_id");
             expect(res.body.owners[0].owner_id).toBe(1);
+          });
+      });
+      test("GET 200: accepts a max_age query and returns all owners below the specified age", () => {
+        return request(app)
+          .get("/api/owners?max_age=50")
+          .expect(200)
+          .then((res) => {
+            res.body.owners.forEach((owner) => {
+              expect(owner.age).toBeLessThanOrEqual(50);
+            });
+          });
+      });
+      test("GET 400: responds with error message and status 400 when given an invalid data type as a query value", () => {
+        return request(app)
+          .get("/api/owners?max_age=fifty")
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).toBe("Bad request");
+          });
+      });
+      test("GET 200: accepts a min_age query and returns all owners above the specified age", () => {
+        return request(app)
+          .get("/api/owners?min_age=30")
+          .expect(200)
+          .then((res) => {
+            res.body.owners.forEach((owner) => {
+              expect(owner.age).toBeGreaterThanOrEqual(30);
+            });
+          });
+      });
+      test("GET 200: accepts an exact_age query and returns all owners of the specified age", () => {
+        return request(app)
+          .get("/api/owners?exact_age=23")
+          .expect(200)
+          .then((res) => {
+            res.body.owners.forEach((owner) => {
+              expect(owner.age).toBe(23);
+            });
+          });
+      });
+      test("GET 200: accepts a forename query and returns all owners with the specified forename", () => {
+        return request(app)
+          .get("/api/owners?forename=firstname-g")
+          .expect(200)
+          .then((res) => {
+            res.body.owners.forEach((owner) => {
+              expect(owner.forename).toBe("firstname-g");
+            });
+          });
+      });
+      test("GET 200: accepts a surname query and returns all owners with the specified surname", () => {
+        return request(app)
+          .get("/api/owners?surname=lastname-j")
+          .expect(200)
+          .then((res) => {
+            res.body.owners.forEach((owner) => {
+              expect(owner.surname).toBe("lastname-j");
+            });
           });
       });
     });
