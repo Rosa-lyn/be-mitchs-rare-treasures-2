@@ -138,18 +138,41 @@ describe("app", () => {
             expect(res.body.msg).toBe("Missing required properties");
           });
       });
-      test("PATCH 200: updates the cost_at_auction price using the specific treasure Id and responds with updated treasure", () => {
-        return request(app)
-          .patch("/api/treasures/2")
-          .send({ cost_at_auction: "200.02" })
-          .expect(200)
-          .then((res) => {
-            expect(res.body.treasure.cost_at_auction).toBe("200.02");
-            expect(res.body.treasure).toHaveProperty("colour");
-            expect(res.body.treasure).toHaveProperty("age");
-            expect(res.body.treasure).toHaveProperty("treasure_name");
-            expect(res.body.treasure).toHaveProperty("shop_id");
-          });
+      describe("/:treasure_id", () => {
+        test("PATCH 200: updates the cost_at_auction price using the specific treasure Id and responds with updated treasure", () => {
+          return request(app)
+            .patch("/api/treasures/2")
+            .send({ cost_at_auction: "200.02" })
+            .expect(200)
+            .then((res) => {
+              expect(res.body.treasure.cost_at_auction).toBe("200.02");
+              expect(res.body.treasure).toHaveProperty("colour");
+              expect(res.body.treasure).toHaveProperty("age");
+              expect(res.body.treasure).toHaveProperty("treasure_name");
+              expect(res.body.treasure).toHaveProperty("shop_id");
+            });
+        });
+        test("PATCH 400: incorrect column on request body", () => {
+          return request(app)
+            .patch("/api/treasures/2")
+            .send({ cost: "402.56" })
+            .expect(400)
+            .then((res) => {
+              expect(res.body.msg).toBe("Bad request");
+            });
+        });
+        test("PATCH 400: incorrect data type for column value on request body", () => {
+          return request(app)
+            .patch("/api/treasures/2")
+            .send({ cost_at_auction: "not-a-price" })
+            .expect(400)
+            .then((res) => {
+              expect(res.body.msg).toBe("Bad request");
+            });
+        });
+        test("DELETE 204: deletes treasure from the database by the given id", () => {
+          return request(app).delete("/api/treasures/5").expect(204);
+        });
       });
     });
   });

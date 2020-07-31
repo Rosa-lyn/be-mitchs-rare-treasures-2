@@ -6,9 +6,14 @@ const {
   getAllTreasures,
   addNewTreasure,
   updateTreasureById,
+  removeTreasureById,
 } = require("../controllers/treasure.controller");
 
 treasuresRouter.route("/").get(getAllTreasures).post(addNewTreasure);
-treasuresRouter.patch("/:treasure_id", updateTreasureById);
+
+treasuresRouter
+  .route("/:treasure_id")
+  .patch(updateTreasureById)
+  .delete(removeTreasureById);
 
 module.exports = treasuresRouter;

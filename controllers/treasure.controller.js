@@ -2,9 +2,10 @@ const {
   fetchAllTreasure,
   postNewTreasure,
   patchTreasureById,
+  deleteTreasureById,
 } = require("../models/treasure.model");
 
-const getAllTreasures = (req, res, next) => {
+exports.getAllTreasures = (req, res, next) => {
   const { sort_by, order, colour } = req.query;
   fetchAllTreasure(sort_by, order, colour)
     .then((allTreasure) => {
@@ -13,7 +14,7 @@ const getAllTreasures = (req, res, next) => {
     .catch(next);
 };
 
-const addNewTreasure = (req, res, next) => {
+exports.addNewTreasure = (req, res, next) => {
   const { body } = req;
   postNewTreasure(body)
     .then((addedTreasure) => {
@@ -22,12 +23,19 @@ const addNewTreasure = (req, res, next) => {
     .catch(next);
 };
 
-const updateTreasureById = (req, res, next) => {
+exports.updateTreasureById = (req, res, next) => {
   const { treasure_id } = req.params;
   const { cost_at_auction } = req.body;
-  patchTreasureById(treasure_id, cost_at_auction).then((updatedTreasure) => {
-    res.send({ treasure: updatedTreasure });
-  });
+  patchTreasureById(treasure_id, cost_at_auction)
+    .then((updatedTreasure) => {
+      res.send({ treasure: updatedTreasure });
+    })
+    .catch(next);
 };
 
-module.exports = { getAllTreasures, addNewTreasure, updateTreasureById };
+exports.removeTreasureById = (req, res, next) => {
+  const { treasure_id } = req.params;
+  deleteTreasureById(treasure_id).then(() => {
+    res.sendStatus(204);
+  });
+};

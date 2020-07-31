@@ -1,6 +1,6 @@
 const knex = require("../db/connection");
 
-const fetchAllTreasure = (
+exports.fetchAllTreasure = (
   sort_by = "cost_at_auction",
   order = "asc",
   colour
@@ -23,7 +23,7 @@ const fetchAllTreasure = (
     .orderBy(sort_by, order);
 };
 
-const postNewTreasure = (treasure) => {
+exports.postNewTreasure = (treasure) => {
   return knex
     .insert(treasure)
     .into("treasures")
@@ -33,14 +33,19 @@ const postNewTreasure = (treasure) => {
     });
 };
 
-const patchTreasureById = (treasure_id, cost_at_auction) => {
-  return knex("treasures")
-    .update("cost_at_auction", cost_at_auction)
-    .where("treasure_id", treasure_id)
-    .returning("*")
-    .then((res) => {
-      return res[0];
-    });
+exports.patchTreasureById = (treasure_id, cost_at_auction) => {
+  if (cost_at_auction === undefined) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  } else
+    return knex("treasures")
+      .update("cost_at_auction", cost_at_auction)
+      .where("treasure_id", treasure_id)
+      .returning("*")
+      .then((res) => {
+        return res[0];
+      });
 };
 
-module.exports = { fetchAllTreasure, postNewTreasure, patchTreasureById };
+exports.deleteTreasureById = (treasure_id) => {
+  return knex("treasures").where("treasure_id", treasure_id).del();
+};
