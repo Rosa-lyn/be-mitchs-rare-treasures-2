@@ -171,8 +171,75 @@ describe("app", () => {
             });
         });
         test("DELETE 204: deletes treasure from the database by the given id", () => {
-          return request(app).delete("/api/treasures/5").expect(204);
+          return request(app)
+            .delete("/api/treasures/5")
+            .expect(204)
+            .then(() => {
+              return request(app)
+                .get("/api/treasures")
+                .then((res) => {
+                  const found = res.body.treasures.some((treasure) => {
+                    return treasure.treasure_id === 5;
+                  });
+                  expect(found).toBe(false);
+                });
+            });
         });
+        test("DELETE 404: responds with an error when given an valid but non existent treasure_id ", () => {
+          return request(app)
+            .delete("/api/treasures/999")
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("Valid but non existent treasure_id");
+            });
+        });
+      });
+    });
+    describe("/owners", () => {
+      test("GET 200: responds with all the owners", () => {
+        return request(app)
+          .get("/api/owners")
+          .expect(200)
+          .then((res) => {
+            res.body.owners.forEach((owner) => {
+              expect(owner).toEqual(
+                expect.objectContaining({
+                  owner_id: expect.any(Number),
+                  forename: expect.any(String),
+                  surname: expect.any(String),
+                  age: expect.any(Number),
+                })
+              );
+            });
+          });
+      });
+      test("GET 200: responds with all the owners in ascending order sorted by owner Id and limited to 10", () => {
+        return request(app)
+          .get("/api/owners")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.owners).toBeSortedBy("owner_id");
+            expect(res.body.owners.length).toBe(10);
+            expect(res.body.owners[0].owner_id).toBe(1);
+          });
+      });
+      test("GET 200: responds with all the owners sorted by the specified column", () => {
+        return request(app)
+          .get("/api/owners?sort_by=forename")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.owners).toBeSortedBy("forename");
+            expect(res.body.owners[0].forename).toBe("firstname-a");
+          });
+      });
+      test.only("Get 200: defaults back to owner Id when given an invalid sort by query", () => {
+        return request(app)
+          .get("/api/owners?sort_by=firstname")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.owners).toBeSortedBy("owner_id");
+            expect(res.body.owners[0].owner_id).toBe(1);
+          });
       });
     });
   });

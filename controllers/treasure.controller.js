@@ -35,7 +35,9 @@ exports.updateTreasureById = (req, res, next) => {
 
 exports.removeTreasureById = (req, res, next) => {
   const { treasure_id } = req.params;
-  deleteTreasureById(treasure_id).then(() => {
-    res.sendStatus(204);
-  });
+  deleteTreasureById(treasure_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 };

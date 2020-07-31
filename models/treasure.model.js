@@ -5,7 +5,6 @@ exports.fetchAllTreasure = (
   order = "asc",
   colour
 ) => {
-  // console.log(colour);
   return knex
     .join("shops", "shops.shop_id", "=", "treasures.shop_id")
     .select(
@@ -47,5 +46,23 @@ exports.patchTreasureById = (treasure_id, cost_at_auction) => {
 };
 
 exports.deleteTreasureById = (treasure_id) => {
-  return knex("treasures").where("treasure_id", treasure_id).del();
+  return knex
+    .select("treasure_id")
+    .from("treasures")
+    .then((res) => {
+      const found = res.some((treasure) => {
+        return treasure.treasure_id === parseInt(treasure_id);
+      });
+      if (!found) {
+        return Promise.reject({
+          status: 404,
+          msg: "Valid but non existent treasure_id",
+        });
+      } else {
+        return knex("treasures")
+          .where("treasure_id", treasure_id)
+          .del()
+          .returning("*");
+      }
+    });
 };
